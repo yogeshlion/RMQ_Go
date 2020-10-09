@@ -1,2 +1,4 @@
 # RMQ_Go
-Implements an RMQ based broker using Go with fault tolerance
+Des: Implements a network with rmq as broker and a consul to provide cluster discovery service.
+Lang: Go
+
