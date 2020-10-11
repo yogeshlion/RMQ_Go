@@ -4,20 +4,23 @@ package main
 import (
 	"log"
 	"fmt"
-	"reflect"
+	//"reflect"
 	"consul"
 	"github.com/streadway/amqp"
 )
-func consulHandle(){
+func consulHandle()(consul.Client1,string){
 	var addr string
 	addr= "127.0.0.1:8500"
-	inter1,inter2,_:=consul.NewConsulClient(addr)
-	fmt.Println(inter1)
-	fmt.Println(inter2)
-	fmt.Println(reflect.TypeOf(inter2))
-	fmt.Println(reflect.TypeOf(inter1))
+	_,inter2,_:=consul.NewConsulClient(addr)
+	//fmt.Println(inter1)
 	err1:=inter2.Register("app2",5357)
+	fmt.Println("Connected to Consul server....")
+	//fmt.Println(x)
 	fmt.Println(err1)
+	return inter2,"app2"
+}
+func faultHandle(inter2 consul.Client1,s string){
+	 inter2.Service(s)
 }
 
 func failOnError(err error, msg string) {
@@ -27,7 +30,8 @@ func failOnError(err error, msg string) {
 }
 
 func main() {
-	consulHandle()
+	inter2,s:=consulHandle()
+	go faultHandle(inter2,s)
 	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
 	failOnError(err, "Failed to connect to RabbitMQ")
 	defer conn.Close()
@@ -58,4 +62,7 @@ func main() {
 		})
 	log.Printf(" [x] Sent %s", body)
 	failOnError(err, "Failed to publish a message")
+	for{
+
+	}
 }
