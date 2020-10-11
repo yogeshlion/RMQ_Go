@@ -3,9 +3,22 @@ package main
 
 import (
 	"log"
-
+	"fmt"
+	"reflect"
+	"consul"
 	"github.com/streadway/amqp"
 )
+func consulHandle(){
+	var addr string
+	addr= "127.0.0.1:8500"
+	inter1,inter2,_:=consul.NewConsulClient(addr)
+	fmt.Println(inter1)
+	fmt.Println(inter2)
+	fmt.Println(reflect.TypeOf(inter2))
+	fmt.Println(reflect.TypeOf(inter1))
+	err1:=inter2.Register("app2",5357)
+	fmt.Println(err1)
+}
 
 func failOnError(err error, msg string) {
 	if err != nil {
@@ -14,6 +27,7 @@ func failOnError(err error, msg string) {
 }
 
 func main() {
+	consulHandle()
 	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
 	failOnError(err, "Failed to connect to RabbitMQ")
 	defer conn.Close()
