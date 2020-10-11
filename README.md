@@ -1,4 +1,5 @@
 # RMQ_Go
 Des: Implements a network with rmq as broker and a consul to provide cluster discovery service.
 Lang: Go
-sapp,rapp: Applications which can send/receive data over a network arbitrated by rmq
+sapp,rapp: Applications which can send/receive data over a network arbitrated by rmq and runs a Consul client that provides service discovery
+setup: Consul config file
