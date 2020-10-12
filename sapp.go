@@ -18,13 +18,15 @@ func consulHandle()(consul.Client1,string){
 }
 
 func faultHandle(inter2 consul.Client1,s string,x chan int){
-	 inter2.Service(s,x)
+	 inter2.Service(s,x,3)
 }
 func main() {
 	x:=make(chan int)
 	inter2,s:=consulHandle()
 	go faultHandle(inter2,s,x)
 	go rmq.SendConn("Data","Hello")
+	go rmq.RevConn("Hello")
 	<-x
-	fmt.Println("Consul Connection is down...Quitting...")
+	rmq.SendConn("Control: App2 is down","Hello")
+	fmt.Println("Exit- Consul Connection.")
 }

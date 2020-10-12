@@ -79,15 +79,15 @@ func (c *Client1) DeRegister(id string) error {
 	return c.consul.Agent().ServiceDeregister(id)
 }
 
-func (c *Client1) Service(service string,x chan int){
+func (c *Client1) Service(service string,x chan int,cnt int){
 	time.Sleep(1000*time.Millisecond)
-	var cnt int
+	var cntt int
 	for{
 		a,_,_:=c.consul.Agent().AgentHealthServiceByName(service)
-		fmt.Println(a)
-		cnt=cnt+1
+		fmt.Println("Health Status:",a)
+		cntt=cntt+1
 		time.Sleep(2000*time.Millisecond)
-		if cnt==2{
+		if cnt==cntt{
 			err:=c.DeRegister(service)
 			errHandle(err)
 		}
